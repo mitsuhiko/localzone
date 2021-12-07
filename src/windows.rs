@@ -8,6 +8,7 @@ pub struct ZoneMapping {
 include!("windows_zones.gen.rs");
 
 /// Given a windows zone name and an optional territory code returns the IANA zone.
+#[cfg_attr(docsrs, doc(cfg(feature = "win_zones")))]
 pub fn win_zone_to_iana(zone: &str, territory: Option<&str>) -> Option<&'static str> {
     ZONE_MAPPINGS
         .iter()
@@ -19,6 +20,7 @@ pub fn win_zone_to_iana(zone: &str, territory: Option<&str>) -> Option<&'static 
 ///
 /// The return value is in the format `(windows_zone_name, territory_code)` as they
 /// are maintained in the CLDR mapping.
+#[cfg_attr(docsrs, doc(cfg(feature = "win_zones")))]
 pub fn iana_to_win_zone(zone: &str) -> Option<(&'static str, &'static str)> {
     ZONE_MAPPINGS
         .iter()

@@ -25,6 +25,8 @@
 //!   `chrono_tz` by default.
 //! * `win_zones`: when enabled functions are exposed to map between windows and
 //!   IANA timezones.
+#![cfg_attr(docsrs, feature(doc_cfg))]
+
 #[cfg(unix)]
 mod unix;
 #[cfg(any(feature = "win_zones", windows))]
