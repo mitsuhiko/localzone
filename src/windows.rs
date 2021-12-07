@@ -21,6 +21,7 @@ pub fn win_zone_to_iana(zone: &str, territory: Option<&str>) -> Option<&'static 
 /// The return value is in the format `(windows_zone_name, territory_code)` as they
 /// are maintained in the CLDR mapping.
 #[cfg_attr(docsrs, doc(cfg(feature = "win_zones")))]
+#[cfg(feature = "win_zones")]
 pub fn iana_to_win_zone(zone: &str) -> Option<(&'static str, &'static str)> {
     ZONE_MAPPINGS
         .iter()
@@ -30,6 +31,7 @@ pub fn iana_to_win_zone(zone: &str) -> Option<(&'static str, &'static str)> {
 
 #[cfg(windows)]
 mod win_impl {
+    use super::*;
     use windows::Win32::System::Time::{GetTimeZoneInformation, TIME_ZONE_INFORMATION};
 
     fn string_from_utf16(wide: &[u16]) -> String {
@@ -41,7 +43,11 @@ mod win_impl {
         let mut tz = TIME_ZONE_INFORMATION::default();
         if let 0 | 1 | 2 = unsafe { GetTimeZoneInformation(&mut tz) } {
             let zone = string_from_utf16(&tz.StandardName);
-            win_zone_to_iana(&zone, None)
+            if zone == "Coordinated Universal Time" {
+                Some("Etc/UTC".into())
+            } else {
+                win_zone_to_iana(&zone, None).map(|x| x.to_string())
+            }
         } else {
             None
         }
@@ -64,6 +70,7 @@ fn test_win_zone_to_iana() {
 }
 
 #[test]
+#[cfg(feature = "win_zones")]
 fn test_iana_to_win_zone() {
     assert_eq!(
         iana_to_win_zone("Europe/Vienna"),

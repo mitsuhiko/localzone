@@ -62,6 +62,7 @@ pub fn get_local_zone_with_validation<F: FnMut(&str) -> bool>(is_valid: F) -> Op
     }
     #[cfg(windows)]
     {
+        let mut is_valid = is_valid;
         windows::get_local_zone().filter(|x| is_valid(&x))
     }
 }
