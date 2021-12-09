@@ -29,6 +29,8 @@
 
 #[cfg(unix)]
 mod unix;
+#[cfg(all(target_family = "wasm", target_os = "unknown"))]
+mod wasm32;
 #[cfg(any(feature = "win_zones", windows))]
 mod windows;
 
@@ -64,6 +66,11 @@ pub fn get_local_zone_with_validation<F: FnMut(&str) -> bool>(is_valid: F) -> Op
     {
         let mut is_valid = is_valid;
         windows::get_local_zone().filter(|x| is_valid(&x))
+    }
+    #[cfg(all(target_family = "wasm", target_os = "unknown"))]
+    {
+        let _ = is_valid;
+        wasm32::get_local_zone()
     }
 }
 
