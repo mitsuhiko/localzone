@@ -1,7 +1,7 @@
 [package]
 name = "localzone"
 version = "0.2.0"
-edition = "2018"
+edition = "2021"
 authors = ["Armin Ronacher <armin.ronacher@active-4.com>"]
 license = "Apache-2.0"
 description = "figures out the local timezone as IANA / Olson identifier "
@@ -20,10 +20,10 @@ win_zones = []
 auto_validation = ["chrono-tz"]
 
 [dependencies]
-chrono-tz = { version = "0.6.0", optional = true }
+chrono-tz = { version = "0.9", optional = true }
 
 [target.'cfg(windows)'.dependencies]
-windows = { version = "0.28.0", features = ["Win32_Foundation", "Win32_System_Time"] }
+windows = { version = "0.54.0", features = ["Win32_Foundation", "Win32_System_Time"] }
 
 [target.wasm32-unknown-unknown.dependencies]
-js-sys = "0.3.55"
+js-sys = "0.3.69"
